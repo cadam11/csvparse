@@ -28,6 +28,7 @@ class AmountCondition(Condition):
 account_types = ['Chequing', 'MasterCard']
 output_fields = ['Account', 'Date', 'Description', 'Category', 'Amount']
 
+# First matched condition wins
 conditions = [
 	AmountCondition(60, 'www trf', 'Utilities'),
 	AmountCondition(187, 'www trf', 'Home Insurance'),
@@ -42,6 +43,8 @@ conditions = [
 	Condition('misc payment', 'Hydro'),
 	Condition('River park fd', 'Gas'),
 	Condition('Loan interest', 'Finance Charge'),
+	Condition('Transfer', 'Transfer'),
+	Condition('Payment - thank you', 'Transfer'),
 	Condition('Mortgage', 'Mortgage')
 ]
 
