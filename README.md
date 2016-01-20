@@ -8,6 +8,7 @@ In particular, it does the following
  - reduces the transactions to just those that came from Chequing or MasterCard accounts
  - inverts the sign (+/-) for all transaction amounts such that cash outflows are positive
  - reduces the number of columns, eliminating excess data
+ - parses the date string into an ISO date
 
 
 Planned
