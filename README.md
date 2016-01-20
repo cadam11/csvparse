@@ -10,9 +10,9 @@ In particular, it does the following
  - reduces the number of columns, eliminating excess data
  - parses the date string into an ISO date
  - adds categories based on hard-coded conditions
-
+ - optionally filter by month of transaction
 
 Planned
 -------
 
-Maybe later I could make it filter based on the date value of transactions.
+Could add filter by year, not sure if that would ever get used. Would be a better design to externalize the conditions, rather than hard-code. Although I kind of want this to be a self-contained thing.

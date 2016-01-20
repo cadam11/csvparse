@@ -51,6 +51,7 @@ def main():
 	parser = argparse.ArgumentParser(description='Command line utility for parsing RBC transaction export csv files')
 	parser.add_argument('inputfile', help='The name of the csv file to parse')
 	parser.add_argument('-O', '--outputfile', default='out.csv', help='The filename for writing results, defaults to out.csv')
+	parser.add_argument('-M', '--filtermonth', type=int, help='The month to limit transactions to')
 
 	args = parser.parse_args()
 
@@ -60,7 +61,7 @@ def main():
 		writer.writeheader()
 
 		for row in reader:
-			newrow = parserow(row)
+			newrow = parserow(row, args.filtermonth)
 			if newrow:
 				writer.writerow(newrow)
 
@@ -71,16 +72,21 @@ def main():
 
 #-----------------------------------------------------------------------------#
 
-def parserow(row):
+def parserow(row, filtermonth):
 	if row['Account Type'] in account_types:
 		amount = float(row['CAD$']) * -1
+		rowdate = dateutil.parser.parse(row['Transaction Date'])
 		newrow = {
 			'Account': row['Account Type'],
-			'Date': str(dateutil.parser.parse(row['Transaction Date'])).split()[0],
+			'Date': str(rowdate).split()[0],
 			'Description': row['Description 1'].title(),
 			'Category': '',
 			'Amount': amount,
 		}
+
+		if filtermonth and not rowdate.month == filtermonth:
+			return
+
 		category = getcategory(newrow)
 		if category:
 			newrow['Category'] = category
