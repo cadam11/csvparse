@@ -9,9 +9,10 @@ In particular, it does the following
  - inverts the sign (+/-) for all transaction amounts such that cash outflows are positive
  - reduces the number of columns, eliminating excess data
  - parses the date string into an ISO date
+ - adds categories based on hard-coded conditions
 
 
 Planned
 -------
 
-Maybe later I could make it filter based on the date value of transactions. Or maybe intelligently categorize expenses based on criteria.
+Maybe later I could make it filter based on the date value of transactions.

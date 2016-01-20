@@ -3,8 +3,49 @@ import argparse
 import csv
 import dateutil.parser
 
+default_category = 'Unbudgeted'
+
+
+class Condition(object):
+	def __init__(self, pattern, category=default_category):
+		self.category = category
+		self.pattern = pattern
+	def test(self, row):
+		return self.pattern.lower() in row["Description"].lower()
+
+class AmountCondition(Condition):
+	def __init__(self, amount, pattern, category=default_category):
+		super(self.__class__, self).__init__(category)
+		self.amount = amount
+		self.pattern
+	def test(self, row):
+		return super(self.__class__, self).test(row) and float(row['Amount']) == float(self.amount)
+
+
+#-----------------------------------------------------------------------------#
+
+
 account_types = ['Chequing', 'MasterCard']
 output_fields = ['Account', 'Date', 'Description', 'Category', 'Amount']
+
+conditions = [
+	AmountCondition(60, 'www trf', 'Utilities'),
+	AmountCondition(187, 'www trf', 'Home Insurance'),
+	Condition('Moxie', 'Winesdays'),
+	Condition('Sobeys', 'Groceries'),
+	Condition('Extra Foods', 'Groceries'),
+	Condition('Real cdn superstore', 'Groceries'),
+	Condition('Costco', 'Groceries'),
+	Condition('ATHABASCA UNIVERSITY', 'Education'),
+	Condition('Winnipeg technical', 'Education'),
+	Condition('Rogers', 'Mobile Phone'),
+	Condition('misc payment', 'Hydro'),
+	Condition('River park fd', 'Gas'),
+	Condition('Loan interest', 'Finance Charge'),
+	Condition('Mortgage', 'Mortgage')
+]
+
+#-----------------------------------------------------------------------------#
 
 def main():
 	parser = argparse.ArgumentParser(description='Command line utility for parsing RBC transaction export csv files')
@@ -40,12 +81,25 @@ def parserow(row):
 			'Category': '',
 			'Amount': amount,
 		}
+		category = getcategory(newrow)
+		if category:
+			newrow['Category'] = category
+
 		return newrow
+
+
+def getcategory(row):
+	for c in conditions:
+		if c.test(row):
+			return c.category
+
 
 
 
 
 #-----------------------------------------------------------------------------#
+
+
 
 if __name__ == "__main__":
     main()	
