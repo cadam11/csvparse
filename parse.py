@@ -1,6 +1,7 @@
 #!/usr/bin/python
 import argparse
 import csv
+import dateutil.parser
 
 account_types = ['Chequing', 'MasterCard']
 output_fields = ['Account', 'Date', 'Description', 'Category', 'Amount']
@@ -8,7 +9,7 @@ output_fields = ['Account', 'Date', 'Description', 'Category', 'Amount']
 def main():
 	parser = argparse.ArgumentParser(description='Command line utility for parsing RBC transaction export csv files')
 	parser.add_argument('inputfile', help='The name of the csv file to parse')
-	parser.add_argument('-O', '--outputfile', default='out.csv', help='The filename for writing results')
+	parser.add_argument('-O', '--outputfile', default='out.csv', help='The filename for writing results, defaults to out.csv')
 
 	args = parser.parse_args()
 
@@ -34,7 +35,7 @@ def parserow(row):
 		amount = float(row['CAD$']) * -1
 		newrow = {
 			'Account': row['Account Type'],
-			'Date': row['Transaction Date'],
+			'Date': str(dateutil.parser.parse(row['Transaction Date'])).split()[0],
 			'Description': row['Description 1'].title(),
 			'Category': '',
 			'Amount': amount,
